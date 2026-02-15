@@ -3,6 +3,7 @@ import {
   Get, 
   Post, 
   Put, 
+  Patch,
   Delete, 
   Body, 
   Param, 
@@ -18,7 +19,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
-import { Role } from '@prisma/client';
+import { Role, CourseStatus } from '@prisma/client';
 
 @Controller('courses')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -69,5 +70,17 @@ export class CourseController {
   async remove(@CurrentUser() user: any, @Param('id') id: string) {
     await this.courseService.remove(id, user.id);
     return { data: null, message: 'Course deleted successfully' };
+  }
+
+  @Patch(':id/publish')
+  async publish(@CurrentUser() user: any, @Param('id') id: string) {
+    const course = await this.courseService.updateStatus(id, user.id, CourseStatus.PUBLISHED);
+    return { data: course, message: 'Course published successfully' };
+  }
+
+  @Patch(':id/unpublish')
+  async unpublish(@CurrentUser() user: any, @Param('id') id: string) {
+    const course = await this.courseService.updateStatus(id, user.id, CourseStatus.DRAFT);
+    return { data: course, message: 'Course unpublished successfully' };
   }
 }

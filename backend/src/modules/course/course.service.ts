@@ -85,4 +85,16 @@ export class CourseService {
       where: { id },
     });
   }
+
+  async updateStatus(id: string, userId: string, status: CourseStatus): Promise<CourseResponseDto> {
+    // Check if course exists and user owns it
+    await this.findOne(id, userId);
+
+    const course = await this.prisma.course.update({
+      where: { id },
+      data: { status },
+    });
+
+    return course;
+  }
 }

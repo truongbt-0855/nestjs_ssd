@@ -69,9 +69,9 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 **Independent Test**: Giảng viên thay đổi trạng thái xuất bản, học viên chỉ nhìn thấy các khóa học đang ở trạng thái xuất bản
 
-- [ ] T024 [P] [US3] Add publish/unpublish endpoint for Course in backend/src/modules/course/course.controller.ts
-- [ ] T025 [US3] Implement publish status logic in backend/src/modules/course/course.service.ts
-- [ ] T026 [US3] Add tests for publish/unpublish logic in backend/tests/unit/course-publish.spec.ts
+- [X] T024 [P] [US3] Add publish/unpublish endpoint for Course in backend/src/modules/course/course.controller.ts
+- [X] T025 [US3] Implement publish status logic in backend/src/modules/course/course.service.ts
+- [X] T026 [US3] Add tests for publish/unpublish logic in backend/tests/unit/course-publish.spec.ts
 - [ ] T027 [P] [US3] Add publish toggle UI for instructor in frontend/src/pages/admin/courses/
 - [ ] T028 [US3] Integrate publish toggle API in frontend/src/services/course.service.ts
 
