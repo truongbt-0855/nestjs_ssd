@@ -24,7 +24,7 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 **Purpose**: Core infrastructure for all user stories
 
 - [X] T005 Setup base User and Course models in backend/src/models/
-- [ ] T006 [P] Setup authentication (role: instructor/student) in backend/src/modules/auth/
+- [X] T006 [P] Setup authentication (role: instructor/student) in backend/src/modules/auth/
 - [ ] T007 [P] Setup API routing and validation (DTO, class-validator) in backend/src/modules/
 - [ ] T008 Setup environment config and error handling in backend/
 - [ ] T009 Setup base API response format middleware in backend/src/middleware/
