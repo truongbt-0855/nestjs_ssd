@@ -72,4 +72,14 @@ export const courseService = {
   async delete(id: string): Promise<void> {
     await api.delete(`/courses/${id}`);
   },
+
+  async publish(id: string): Promise<Course> {
+    const response = await api.patch<ApiResponse<Course>>(`/courses/${id}/publish`);
+    return response.data.data;
+  },
+
+  async unpublish(id: string): Promise<Course> {
+    const response = await api.patch<ApiResponse<Course>>(`/courses/${id}/unpublish`);
+    return response.data.data;
+  },
 };

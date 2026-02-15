@@ -4,10 +4,13 @@ interface CourseListProps {
   courses: Course[];
   onEdit: (course: Course) => void;
   onDelete: (id: string) => void;
+  onPublish?: (id: string) => Promise<void>;
+  onUnpublish?: (id: string) => Promise<void>;
   isLoading?: boolean;
+  isTogglingId?: string;
 }
 
-export default function CourseList({ courses, onEdit, onDelete, isLoading }: CourseListProps) {
+export default function CourseList({ courses, onEdit, onDelete, onPublish, onUnpublish, isLoading, isTogglingId }: CourseListProps) {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-12">
@@ -70,6 +73,24 @@ export default function CourseList({ courses, onEdit, onDelete, isLoading }: Cou
             >
               Delete
             </button>
+            {course.status === 'PUBLISHED' && onUnpublish && (
+              <button
+                onClick={() => onUnpublish(course.id)}
+                disabled={isTogglingId === course.id}
+                className="flex-1 px-3 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isTogglingId === course.id ? 'Unpublishing...' : 'Unpublish'}
+              </button>
+            )}
+            {course.status === 'DRAFT' && onPublish && (
+              <button
+                onClick={() => onPublish(course.id)}
+                disabled={isTogglingId === course.id}
+                className="flex-1 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isTogglingId === course.id ? 'Publishing...' : 'Publish'}
+              </button>
+            )}
           </div>
         </div>
       ))}

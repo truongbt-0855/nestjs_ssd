@@ -10,6 +10,7 @@ export default function AdminCoursesPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedCourse, setSelectedCourse] = useState<Course | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | undefined>(undefined);
 
   const queryClient = useQueryClient();
 
@@ -47,6 +48,32 @@ export default function AdminCoursesPage() {
     },
   });
 
+  // Publish mutation
+  const publishMutation = useMutation({
+    mutationFn: (id: string) => courseService.publish(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      setTogglingId(undefined);
+    },
+    onError: (err: any) => {
+      setError(err.response?.data?.message || 'Failed to publish course');
+      setTogglingId(undefined);
+    },
+  });
+
+  // Unpublish mutation
+  const unpublishMutation = useMutation({
+    mutationFn: (id: string) => courseService.unpublish(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      setTogglingId(undefined);
+    },
+    onError: (err: any) => {
+      setError(err.response?.data?.message || 'Failed to unpublish course');
+      setTogglingId(undefined);
+    },
+  });
+
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: (id: string) => courseService.delete(id),
@@ -74,7 +101,15 @@ export default function AdminCoursesPage() {
   const handleDelete = async (id: string) => {
     await deleteMutation.mutateAsync(id);
   };
+  const handlePublish = async (id: string) => {
+    setTogglingId(id);
+    await publishMutation.mutateAsync(id);
+  };
 
+  const handleUnpublish = async (id: string) => {
+    setTogglingId(id);
+    await unpublishMutation.mutateAsync(id);
+  };
   const handleSubmit = async (data: CreateCourseDto | UpdateCourseDto) => {
     if (viewMode === 'create') {
       await createMutation.mutateAsync(data as CreateCourseDto);
@@ -123,7 +158,10 @@ export default function AdminCoursesPage() {
             courses={courses}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onPublish={handlePublish}
+            onUnpublish={handleUnpublish}
             isLoading={isLoading}
+            isTogglingId={togglingId}
           />
         </>
       )}
