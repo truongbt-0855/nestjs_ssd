@@ -4,22 +4,21 @@
 **Branch**: `001-khoa-hoc` | **Date**: 2026-02-15 | **Spec**: [specs/001-khoa-hoc/spec.md](specs/001-khoa-hoc/spec.md)
 **Input**: Feature specification from `/specs/001-khoa-hoc/spec.md`
 
-## Summary
 
-Hệ thống quản lý khóa học cho phép giảng viên tạo, sửa, xóa khóa học; học viên có thể xem danh sách khóa học đã xuất bản. Backend sử dụng NestJS (TypeScript), Prisma, PostgreSQL; frontend dùng React (Vite), Tailwind CSS, TanStack Query. Kiến trúc chia module rõ ràng, API trả về format chuẩn, kiểm soát quyền sở hữu và trạng thái xuất bản.
+Hệ thống quản lý khóa học cho phép người dùng đăng nhập (giảng viên/học viên), giảng viên tạo/sửa/xóa khóa học, học viên xem danh sách khóa học đã xuất bản. Backend sử dụng NestJS (TypeScript), Prisma, PostgreSQL; frontend dùng React (Vite), Tailwind CSS, TanStack Query. Kiến trúc chia module rõ ràng (có module auth cho login), API trả về format chuẩn, kiểm soát quyền sở hữu và trạng thái xuất bản.
 
 
 ## Technical Context
 
 **Language/Version**: TypeScript (NestJS 10+), React 18+, Node.js 18+
-**Primary Dependencies**: NestJS, Prisma, PostgreSQL, React, Vite, Tailwind CSS, TanStack Query
+**Primary Dependencies**: NestJS, Prisma, PostgreSQL, React, Vite, Tailwind CSS, TanStack Query, JWT
 **Storage**: PostgreSQL (UUID primary key)
 **Testing**: Jest (backend), React Testing Library (frontend)
 **Target Platform**: Web (modern browsers, Node.js server)
 **Project Type**: web (monorepo: backend + frontend)
 **Performance Goals**: CRUD thao tác < 1s, danh sách khóa học cập nhật trạng thái xuất bản < 5s
-**Constraints**: API trả về format `{ "data": ..., "message": "..." }`, kiểm soát quyền sở hữu, phân quyền instructor/student
-**Scale/Scope**: MVP, 2 vai trò (giảng viên, học viên), 1 bảng chính (Course), 1 bảng User, tối đa vài nghìn bản ghi
+**Constraints**: API trả về format `{ "data": ..., "message": "..." }`, kiểm soát quyền sở hữu, phân quyền instructor/student, tất cả chức năng chính yêu cầu xác thực đăng nhập
+**Scale/Scope**: MVP, 2 vai trò (giảng viên, học viên), 1 bảng chính (Course), 1 bảng User, chức năng login/auth, tối đa vài nghìn bản ghi
 
 ## Constitution Check
 
@@ -95,9 +94,9 @@ ios/ or android/
 
 
 **Structure Decision**: Sử dụng cấu trúc monorepo với hai thư mục chính:
-- `backend/`: NestJS, chia module (course, user, auth, ...), có `src/models/`, `src/services/`, `src/api/`, `tests/`
-- `frontend/`: React (Vite), chia rõ `src/components/`, `src/pages/`, `src/services/`, `tests/`
-Tuân thủ chuẩn đặt tên (kebab-case cho file, PascalCase cho class/component).
+- `backend/`: NestJS, chia module (course, user, auth, ...), có `src/models/`, `src/services/`, `src/api/`, `src/modules/auth/`, `tests/`
+- `frontend/`: React (Vite), chia rõ `src/components/`, `src/pages/`, `src/services/`, `src/pages/login/`, `tests/`
+Tuân thủ chuẩn đặt tên (kebab-case cho file, PascalCase cho class/component). Module auth (backend) và login UI (frontend) là bắt buộc.
 
 ## Complexity Tracking
 

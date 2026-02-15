@@ -27,7 +27,19 @@
 -->
 
 
-### User Story 1 - Instructor manages courses (Priority: P1)
+
+### User Story 0 - User login (Priority: P0)
+
+Người dùng (giảng viên/học viên) có thể đăng nhập vào hệ thống để sử dụng các chức năng phù hợp với vai trò.
+
+**Why this priority**: Đăng nhập là điều kiện tiên quyết để phân quyền và bảo vệ dữ liệu, đảm bảo chỉ người dùng hợp lệ mới truy cập được chức năng quản lý hoặc xem khóa học.
+
+**Independent Test**: Người dùng đăng nhập thành công với tài khoản hợp lệ, thất bại với tài khoản sai; sau khi đăng nhập, giao diện và API phản hồi đúng theo vai trò.
+
+**Acceptance Scenarios**:
+1. **Given** người dùng có tài khoản hợp lệ, **When** đăng nhập, **Then** truy cập được các chức năng phù hợp với vai trò.
+2. **Given** người dùng nhập sai thông tin, **When** đăng nhập, **Then** nhận được thông báo lỗi.
+3. **Given** chưa đăng nhập, **When** truy cập chức năng quản lý hoặc xem khóa học, **Then** bị chuyển hướng hoặc từ chối truy cập.
 
 Giảng viên có thể tạo mới, chỉnh sửa, và xóa khóa học của mình thông qua giao diện quản trị.
 
@@ -87,7 +99,9 @@ Giảng viên có thể chuyển đổi trạng thái xuất bản của khóa h
 -->
 
 
+
 ### Functional Requirements
+- **FR-000**: Hệ thống phải cho phép người dùng (giảng viên/học viên) đăng nhập bằng tài khoản hợp lệ.
 - **FR-001**: Hệ thống phải cho phép giảng viên tạo mới khóa học.
 - **FR-002**: Hệ thống phải cho phép giảng viên sửa thông tin khóa học của mình.
 - **FR-003**: Hệ thống phải cho phép giảng viên xóa khóa học của mình.
@@ -110,7 +124,9 @@ Giảng viên có thể chuyển đổi trạng thái xuất bản của khóa h
 -->
 
 
+
 ### Measurable Outcomes
+- **SC-000**: 100% chức năng quản lý/xem khóa học đều yêu cầu xác thực đăng nhập; người dùng không đăng nhập không thể truy cập các chức năng này.
 - **SC-001**: Giảng viên có thể tạo/sửa/xóa khóa học thành công trong vòng 1 phút cho mỗi thao tác.
 - **SC-002**: Học viên luôn nhìn thấy danh sách khóa học đã xuất bản đúng với trạng thái thực tế (không trễ quá 5 giây sau khi thay đổi trạng thái xuất bản).
 - **SC-003**: 100% thao tác không hợp lệ (ví dụ: sửa/xóa khóa học không thuộc quyền sở hữu) đều bị từ chối với thông báo rõ ràng.
