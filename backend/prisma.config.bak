@@ -1,0 +1,11 @@
+module.exports = {
+  schema: './prisma/schema.prisma',
+  generator: {
+    provider: 'prisma-client-js',
+    output: './node_modules/@prisma/client',
+  },
+  datasource: {
+    provider: 'postgresql',
+    url: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/nest_course',
+  },
+};
