@@ -86,7 +86,7 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 **Purpose**: Tạo dữ liệu mẫu cho backend (Prisma) để test đủ các tính năng, seed đầy đủ các bảng (User, Course, ...)
 
-- [ ] T034 [P] Seed/mock data cho backend (Prisma) đủ các bảng để test API và tính năng (User, Course, ...)
+- [X] T034 [P] Seed/mock data cho backend (Prisma) đủ các bảng để test API và tính năng (User, Course, ...)
 
 ---
 
