@@ -49,6 +49,11 @@ export const courseService = {
     return response.data.data;
   },
 
+  async getPublished(): Promise<Course[]> {
+    const response = await api.get<ApiResponse<Course[]>>('/courses/published');
+    return response.data.data;
+  },
+
   async getById(id: string): Promise<Course> {
     const response = await api.get<ApiResponse<Course>>(`/courses/${id}`);
     return response.data.data;

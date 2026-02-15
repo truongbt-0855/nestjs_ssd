@@ -204,3 +204,59 @@ npm run build
 ---
 
 File này được cập nhật tự động để lưu lại các lỗi thực tế và cách giải quyết trong quá trình phát triển React + TypeScript + Vite.
+
+## 2026-02-16 (Session 3 continued)
+
+### User Story 2 Frontend - React Query & Tailwind CSS Setup Errors
+
+**8. Error: No QueryClient set, use QueryClientProvider to set one**
+
+- **File affected**: `frontend/src/pages/CoursesPage.tsx`
+- **Root Cause**: Khi implement CoursesPage với `useQuery()` hook, chưa wrap React component tree với `QueryClientProvider`
+- **Solution**: ✅ FIXED
+  - Thêm import: `import { QueryClient, QueryClientProvider } from '@tanstack/react-query'`
+  - Tạo QueryClient instance trong `App.tsx`
+  - Wrap `<BrowserRouter>` bằng `<QueryClientProvider client={queryClient}>`
+  ```typescript
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: 1,
+      },
+    },
+  });
+  ```
+
+---
+
+**9. Error: Tailwind CSS PostCSS Plugin Configuration (v4)**
+
+- **Error Message**: `[postcss] It looks like you're trying to use 'tailwindcss' directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install '@tailwindcss/postcss'...`
+- **Root Cause**: Project dùng Tailwind v4 nhưng:
+  1. Chưa tạo `postcss.config.js`
+  2. CSS syntax chưa update cho v4
+- **Solution**: ✅ FIXED (3 bước)
+
+  1. Tạo `postcss.config.js`:
+  ```javascript
+  export default {
+    plugins: {
+      '@tailwindcss/postcss': {},
+    },
+  };
+  ```
+
+  2. Cài package:
+  ```bash
+  npm install @tailwindcss/postcss
+  ```
+
+  3. Update `src/index.css` (Tailwind v4):
+  ```css
+  @import "tailwindcss";
+  ```
+
+---
+
+File này được cập nhật tự động để lưu lại các lỗi thực tế và cách giải quyết.

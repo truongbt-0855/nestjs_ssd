@@ -35,6 +35,19 @@ export class CourseService {
     return courses;
   }
 
+  async findAllPublished(): Promise<CourseResponseDto[]> {
+    const courses = await this.prisma.course.findMany({
+      where: {
+        status: CourseStatus.PUBLISHED,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return courses;
+  }
+
   async findOne(id: string, userId: string): Promise<CourseResponseDto> {
     const course = await this.prisma.course.findUnique({
       where: { id },

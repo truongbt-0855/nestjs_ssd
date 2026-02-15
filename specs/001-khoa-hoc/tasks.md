@@ -54,12 +54,12 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 **Independent Test**: Truy cập giao diện học viên, xác nhận hiển thị đúng danh sách các khóa học đã xuất bản
 
-- [ ] T018 [P] [US2] Add published status to Course entity/model in backend/src/models/course.entity.ts
-- [ ] T019 [US2] Implement endpoint to list published courses in backend/src/modules/course/course.controller.ts
-- [ ] T020 [US2] Add contract/integration tests for published course listing in backend/tests/integration/course-list.spec.ts
-- [ ] T021 [P] [US2] Create student-facing course list UI in frontend/src/pages/courses/
-- [ ] T022 [US2] Integrate published course API in frontend/src/services/course.service.ts
-- [ ] T023 [US2] Add loading, empty, and error states in frontend/src/pages/courses/
+- [X] T018 [P] [US2] Add published status to Course entity/model in backend/src/models/course.entity.ts
+- [X] T019 [US2] Implement endpoint to list published courses in backend/src/modules/course/course.controller.ts
+- [X] T020 [US2] Add contract/integration tests for published course listing in backend/tests/integration/course-list.spec.ts
+- [X] T021 [P] [US2] Create student-facing course list UI in frontend/src/pages/courses/
+- [X] T022 [US2] Integrate published course API in frontend/src/services/course.service.ts
+- [X] T023 [US2] Add loading, empty, and error states in frontend/src/pages/courses/
 
 ---
 

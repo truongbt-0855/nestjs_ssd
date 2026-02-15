@@ -514,3 +514,76 @@ Sau khi restart, tất cả lỗi sẽ biến mất hoàn toàn.
 ---
 
 File này ghi lại quá trình debug và giải pháp cho các lỗi phổ biến khi setup NestJS + Prisma + JWT với TypeScript strict mode.
+---
+
+## 2026-02-16: User Story 2 - Published Courses Public Endpoint
+
+### Implementation Notes
+
+**Public Endpoint for Students (T019)**
+- ✅ Added `@Public()` decorator to bypass JWT authentication
+- ✅ Created `public.decorator.ts` in `src/common/decorators/`
+- ✅ Updated `jwt-auth.guard.ts` to check for @Public metadata using Reflector
+- ✅ Added `findAllPublished()` service method that filters by CourseStatus.PUBLISHED
+- ✅ Endpoint: `GET /courses/published` (public, no auth required)
+
+**Key Code**:
+```typescript
+// public.decorator.ts
+import { SetMetadata } from '@nestjs/common';
+
+export const IS_PUBLIC_KEY = 'isPublic';
+export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+
+// jwt-auth.guard.ts updates
+constructor(private reflector: Reflector) {
+  super(configService);
+}
+
+async canActivate(context: ExecutionContext): Promise<boolean> {
+  const isPublic = this.reflector.getAllAndOverride<boolean>(
+    IS_PUBLIC_KEY,
+    [context.getHandler(), context.getClass()],
+  );
+  if (isPublic) {
+    return true;
+  }
+  return super.canActivate(context);
+}
+
+// course.service.ts
+async findAllPublished(): Promise<CourseResponseDto[]> {
+  const courses = await this.prisma.course.findMany({
+    where: { status: CourseStatus.PUBLISHED },
+    orderBy: { createdAt: 'desc' }
+  });
+  return courses;
+}
+
+// course.controller.ts
+@Public()
+@Get('published')
+async findAllPublished() {
+  const courses = await this.courseService.findAllPublished();
+  return { data: courses, message: 'Published courses retrieved successfully' };
+}
+```
+
+**Testing (T020)**
+- ✅ Created `tests/integration/course-list.spec.ts`
+- ✅ All 7 tests passing:
+  - Returns array of courses
+  - Filters only PUBLISHED status
+  - Works for all instructors
+  - Orders by creation date (newest first)
+  - Has all required fields (id, title, description, status, ownerId, createdAt, updatedAt)
+  - Requires no authentication (@Public works)
+  - Handles null description
+
+**No New Errors in NestJS Backend**
+- Backend builds successfully
+- TypeScript compilation clean
+- All decorator and service implementations work without errors
+- Integration tests pass without issues
+
+---

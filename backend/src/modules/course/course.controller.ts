@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 import { Role } from '@prisma/client';
 
 @Controller('courses')
@@ -24,6 +25,13 @@ import { Role } from '@prisma/client';
 @Roles(Role.INSTRUCTOR)
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
+
+  @Public()
+  @Get('published')
+  async findAllPublished() {
+    const courses = await this.courseService.findAllPublished();
+    return { data: courses, message: 'Published courses retrieved successfully' };
+  }
 
   @Post()
   async create(
