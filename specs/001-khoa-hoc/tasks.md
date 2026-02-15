@@ -26,9 +26,9 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 - [X] T005 Setup base User and Course models in backend/src/models/
 - [X] T006 [P] Setup authentication (role: instructor/student) in backend/src/modules/auth/
 - [X] T007 [P] Setup API routing and validation (DTO, class-validator) in backend/src/modules/
-- [ ] T008 Setup environment config and error handling in backend/
-- [ ] T009 Setup base API response format middleware in backend/src/middleware/
-- [ ] T010 Setup frontend routing and base layout in frontend/src/
+- [X] T008 Setup environment config and error handling in backend/
+- [X] T009 Setup base API response format middleware in backend/src/middleware/
+- [X] T010 Setup frontend routing and base layout in frontend/src/
 
 ---
 
