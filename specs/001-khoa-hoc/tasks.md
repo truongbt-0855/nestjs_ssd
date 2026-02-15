@@ -79,11 +79,17 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-- [ ] T029 [P] Update documentation in specs/001-khoa-hoc/
-- [ ] T030 Code cleanup, refactor, and review
-- [ ] T031 [P] Add additional unit/integration tests as needed
-- [ ] T032 Security review and hardening
-- [ ] T033 Run quickstart validation and user acceptance test
+
+---
+
+## Phase N2: Seed & Mock Data (Pre-final)
+
+**Purpose**: Tạo dữ liệu mẫu cho backend (Prisma) để test đủ các tính năng, seed đầy đủ các bảng (User, Course, ...)
+
+- [ ] T034 [P] Seed/mock data cho backend (Prisma) đủ các bảng để test API và tính năng (User, Course, ...)
+
+---
+
 
 ---
 
