@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+*.min.js
+.env*
+vite.config.ts
+tailwind.config.js

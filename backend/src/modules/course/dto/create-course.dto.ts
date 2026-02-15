@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateCourseDto {
   @IsString()
@@ -6,5 +6,6 @@ export class CreateCourseDto {
   title: string;
 
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 }

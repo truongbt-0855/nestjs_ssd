@@ -38,13 +38,13 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 **Independent Test**: Đăng nhập với vai trò giảng viên, thực hiện tạo, sửa, xóa một khóa học và xác nhận thay đổi xuất hiện trong danh sách quản trị
 
-- [ ] T011 [P] [US1] Create Course module (controller, service, DTO, entity) in backend/src/modules/course/
-- [ ] T012 [P] [US1] Implement create, update, delete endpoints for Course in backend/src/modules/course/course.controller.ts
-- [ ] T013 [US1] Add ownership checks for Course actions in backend/src/modules/course/course.service.ts
-- [ ] T014 [US1] Add API contract tests for Course CRUD in backend/tests/contract/course-crud.spec.ts
-- [ ] T015 [P] [US1] Create Course management UI (list, create, edit, delete) in frontend/src/pages/admin/courses/
-- [ ] T016 [US1] Integrate Course CRUD API in frontend/src/services/course.service.ts
-- [ ] T017 [US1] Add form validation and error handling in frontend/src/pages/admin/courses/
+- [X] T011 [P] [US1] Create Course module (controller, service, DTO, entity) in backend/src/modules/course/
+- [X] T012 [P] [US1] Implement create, update, delete endpoints for Course in backend/src/modules/course/course.controller.ts
+- [X] T013 [US1] Add ownership checks for Course actions in backend/src/modules/course/course.service.ts
+- [X] T014 [US1] Add API contract tests for Course CRUD in backend/tests/contract/course-crud.spec.ts
+- [X] T015 [P] [US1] Create Course management UI (list, create, edit, delete) in frontend/src/pages/admin/courses/
+- [X] T016 [US1] Integrate Course CRUD API in frontend/src/services/course.service.ts
+- [X] T017 [US1] Add form validation and error handling in frontend/src/pages/admin/courses/
 
 ---
 
