@@ -12,10 +12,10 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 **Purpose**: Project initialization and monorepo structure
 
-- [ ] T001 Create monorepo structure: backend/ (NestJS), frontend/ (React) at repo root
-- [ ] T002 Initialize NestJS project in backend/ with Prisma, PostgreSQL config
-- [ ] T003 Initialize React (Vite) project in frontend/ with Tailwind CSS, TanStack Query
-- [ ] T004 [P] Configure linting, formatting, and pre-commit hooks for both backend/ and frontend/
+- [X] T001 Create monorepo structure: backend/ (NestJS), frontend/ (React) at repo root
+- [X] T002 Initialize NestJS project in backend/ with Prisma, PostgreSQL config
+- [X] T003 Initialize React (Vite) project in frontend/ with Tailwind CSS, TanStack Query
+- [X] T004 [P] Configure linting, formatting, and pre-commit hooks for both backend/ and frontend/
 
 ---
 
