@@ -72,8 +72,8 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 - [X] T024 [P] [US3] Add publish/unpublish endpoint for Course in backend/src/modules/course/course.controller.ts
 - [X] T025 [US3] Implement publish status logic in backend/src/modules/course/course.service.ts
 - [X] T026 [US3] Add tests for publish/unpublish logic in backend/tests/unit/course-publish.spec.ts
-- [ ] T027 [P] [US3] Add publish toggle UI for instructor in frontend/src/pages/admin/courses/
-- [ ] T028 [US3] Integrate publish toggle API in frontend/src/services/course.service.ts
+- [X] T027 [P] [US3] Add publish toggle UI for instructor in frontend/src/pages/admin/courses/
+- [X] T028 [US3] Integrate publish toggle API in frontend/src/services/course.service.ts
 
 ---
 
