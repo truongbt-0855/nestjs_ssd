@@ -1,0 +1,43 @@
+// Prisma schema for Course Management System
+// Phase 2: Foundational - User & Course models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  courses   Course[] @relation("InstructorCourses")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  INSTRUCTOR
+  STUDENT
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      CourseStatus @default(DRAFT)
+  ownerId     String
+  owner       User     @relation("InstructorCourses", fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+}
