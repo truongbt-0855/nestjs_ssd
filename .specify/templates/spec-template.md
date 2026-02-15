@@ -7,6 +7,11 @@
 
 ## User Scenarios & Testing *(mandatory)*
 
+**Constitution Compliance:**
+- Backend user stories MUST target NestJS modules, Prisma, and PostgreSQL.
+- Frontend user stories MUST target React (Vite), Tailwind CSS, and TanStack Query.
+- Folder structure and naming conventions MUST be followed (see constitution).
+
 <!--
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
   Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,

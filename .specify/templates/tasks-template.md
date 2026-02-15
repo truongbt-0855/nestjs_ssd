@@ -20,10 +20,12 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+
+- **Monorepo**: `backend/` for NestJS backend, `frontend/` for React frontend
+- **Backend**: `backend/src/` (modules, services, etc.), `backend/tests/`
+- **Frontend**: `frontend/src/` (components, pages, services), `frontend/tests/`
+- Filenames MUST be kebab-case; Classes/Components MUST be PascalCase
+- All tasks MUST reference constitution standards for backend/frontend, structure, and naming
 
 <!-- 
   ============================================================================

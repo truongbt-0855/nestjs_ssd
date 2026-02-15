@@ -33,6 +33,14 @@
 
 [Gates determined based on constitution file]
 
+- Backend code MUST use NestJS (strict TypeScript), Prisma, and PostgreSQL.
+- Frontend code MUST use React (Vite), Tailwind CSS, and TanStack Query.
+- Modular architecture required for backend (each feature as a module).
+- Functional components and hooks required for frontend.
+- Folder structure MUST separate `backend` and `frontend` (monorepo style).
+- Filenames MUST be kebab-case; Classes/Components MUST be PascalCase.
+- All code and PRs MUST be reviewed for compliance with these standards.
+
 ## Project Structure
 
 ### Documentation (this feature)
