@@ -31,78 +31,7 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 - [X] T009 Setup base API response format middleware in backend/src/middleware/
 - [X] T010 Setup frontend routing and base layout in frontend/src/
 
----
-
-## Phase 3: User Story 0 - User Registration & Login with JWT (Priority: P0) 🆕
-
-**Goal**: Users can register, login with email/password, receive JWT token for authenticated operations
-
-**Independent Test**: Register user → Login → Receive JWT token → Use token on protected endpoints → Token expires/logout
-
-**Why P0**: Authentication is prerequisite for all other user stories (role-based access, course ownership, etc.)
-
-### Backend: User Model & Auth Infrastructure
-
-- [ ] T029 [P] [US0] Update `backend/src/modules/auth/auth.service.ts`: Add bcrypt password hashing and JWT generation (sub, role, exp claims)
-- [ ] T030 [P] [US0] Create `backend/src/modules/auth/strategies/jwt.strategy.ts`: Implement JwtStrategy for token validation via Passport
-- [ ] T031 [P] [US0] Create `backend/src/modules/auth/guards/jwt-auth.guard.ts`: Add @UseGuards(JwtAuthGuard) for endpoint protection
-- [ ] T032 [P] [US0] Create `backend/src/modules/auth/decorators/current-user.decorator.ts`: Extract user from JWT payload via @CurrentUser()
-- [ ] T033 [US0] Update `backend/src/modules/auth/auth.controller.ts`:
-  - POST /auth/register: Accept { email, password, name, role }, hash password, create user
-  - POST /auth/login: Accept { email, password }, compare password, generate JWT token, return { access_token, user }
-- [ ] T034 [P] [US0] Update `backend/prisma/schema.prisma`: Add password field to User model
-- [ ] T035 Create and run `backend/prisma/migrations/add_password_to_user` migration
-- [ ] T036 [P] [US0] Update `backend/prisma/seed.ts`: Add hashed passwords to test users (instructor1/2, student1/2)
-
-### Frontend: Authentication UI & Service
-
-- [ ] T037 [P] [US0] Create `frontend/src/services/auth.service.ts` with methods:
-  - register(email, password, name, role)
-  - login(email, password)
-  - logout(): Clear localStorage
-  - getToken(), getCurrentUser(), isAuthenticated(), isInstructor()
-- [ ] T038 [P] [US0] Create `frontend/src/pages/LoginPage.tsx`:
-  - Email, password input fields with validation
-  - Submit button, loading state, error messages
-  - Success: Save token to localStorage, redirect to /courses
-- [ ] T039 [P] [US0] Create `frontend/src/pages/RegisterPage.tsx`:
-  - Email, password, name, role selector with validation
-  - Submit button, loading state, error messages
-  - Success: Save token, redirect to /courses
-- [ ] T040 [P] [US0] Create `frontend/src/components/ProtectedRoute.tsx`:
-  - Check isAuthenticated(), redirect to /login if false
-  - Optional: Check role for role-specific routes
-- [ ] T041 [US0] Update `frontend/src/utils/axios.ts`:
-  - Add JWT token to Authorization header on all requests (interceptor)
-  - Catch 401 errors, clear token, redirect to /login
-- [ ] T042 [US0] Update `frontend/src/App.tsx` routing:
-  - Public routes: /login, /register
-  - Protected routes: /courses, /admin/courses (INSTRUCTOR only)
-  - Home / redirects based on authentication status
-- [ ] T043 [P] [US0] Create `frontend/src/components/Navbar.tsx`:
-  - Display user name, logout button
-  - Show/hide based on isAuthenticated()
-
-### Testing for User Story 0
-
-- [ ] T044 [P] [US0] Create `backend/tests/unit/auth.spec.ts`:
-  - hashPassword() generates bcrypt hash
-  - comparePassword() validates correct/incorrect passwords
-  - JWT token includes sub, role, exp claims
-  - Invalid JWT signature rejected
-- [ ] T045 [US0] Create `backend/tests/integration/auth.spec.ts`:
-  - POST /auth/register creates user successfully
-  - POST /auth/register duplicate email returns 400
-  - POST /auth/login valid credentials returns JWT
-  - POST /auth/login invalid password returns 401
-  - Protected endpoints without token return 401
-  - Protected endpoints with valid token succeed
-
-**Checkpoint**: User Story 0 complete - Users can register/login with JWT ✅
-
----
-
-## Phase 4: User Story 1 - Instructor manages courses (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Instructor manages courses (Priority: P1) 🎯 MVP
 
 **Goal**: Giảng viên có thể tạo, sửa, xóa khóa học của mình qua giao diện quản trị
 
@@ -118,7 +47,7 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ---
 
-## Phase 5: User Story 2 - Student views published courses (Priority: P2)
+## Phase 4: User Story 2 - Student views published courses (Priority: P2)
 
 **Goal**: Học viên có thể xem danh sách các khóa học đã xuất bản
 
@@ -133,7 +62,7 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ---
 
-## Phase 6: User Story 3 - Manage publish status (Priority: P3)
+## Phase 5: User Story 3 - Manage publish status (Priority: P3)
 
 **Goal**: Giảng viên có thể chuyển đổi trạng thái xuất bản của khóa học
 
@@ -147,11 +76,11 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns
+## Phase 6: Polish & Cross-Cutting Concerns
 
 ---
 
-## Phase 8: Documentation & Final Validation
+## Phase 7: Documentation & Final Validation
 
 - [ ] T046 [P] Create `DEVELOPMENT.md` with setup instructions (env, docker, database, dev servers)
 - [ ] T047 [P] Create `API.md` with complete endpoint documentation (auth, courses, published)
@@ -160,38 +89,85 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ---
 
-## Summary
+## Phase 8: User Story 0 - Đăng nhập với JWT (Priority: P0)
 
-**Total Tasks**: 49 (including all 3 completed phases + new US0 + US1-3 + docs)
+**Mục tiêu**: Người dùng (giảng viên/học viên) có thể đăng nhập bằng email/mật khẩu từ seed data và nhận JWT token để sử dụng các tính năng khác
 
-**Completed Phases**:
-- ✅ Phase 1: Setup (T001-T004) - 4 tasks
-- ✅ Phase 2: Foundational (T005-T010) - 6 tasks
-- **🆕 Phase 3: User Story 0 - JWT Auth (T029-T045)** - 17 NEW tasks
-- ✅ Phase 4: User Story 1 - CRUD (T011-T017) - 7 tasks
-- ✅ Phase 5: User Story 2 - Student View (T018-T023) - 6 tasks
-- ✅ Phase 6: User Story 3 - Publish (T024-T028) - 5 tasks
+**Kiểm thử độc lập**: Đăng nhập (email/password từ seed) → Nhận JWT token → Sử dụng token trên các endpoint bảo vệ → Token hợp lệ
 
-**New Tasks**: T029-T049 (21 new tasks total)
+**Tại sao P0**: Đăng nhập là điều kiện tiên quyết để phân quyền theo vai trò và bảo vệ dữ liệu
+
+### Backend: Xác thực JWT
+
+- [ ] T050 [P] [US0] Cập nhật `backend/src/modules/auth/auth.service.ts`: Thêm login logic, kiểm tra email/password, sinh JWT token (claim: sub, role, exp = 1 ngày)
+- [ ] T051 [P] [US0] Tạo `backend/src/modules/auth/strategies/jwt.strategy.ts`: Validate JWT token via Passport strategy
+- [ ] T052 [P] [US0] Tạo `backend/src/modules/auth/guards/jwt-auth.guard.ts`: Dùng @UseGuards(JwtAuthGuard) để bảo vệ endpoint
+- [ ] T053 [P] [US0] Tạo `backend/src/modules/auth/decorators/current-user.decorator.ts`: Lấy user từ JWT via @CurrentUser()
+- [ ] T054 [US0] Cập nhật `backend/src/modules/auth/auth.controller.ts` - Endpoint login:
+  - POST /auth/login: Nhận { email, password }, kiểm tra mật khẩu, tạo JWT, trả về { access_token, user }
+- [ ] T055 [P] [US0] Cập nhật `backend/prisma/seed.ts`: Đảm bảo seed data có password hash cho users (instructor1@example.com/password, student1@example.com/password)
+
+### Frontend: Login UI & Service
+
+- [ ] T056 [P] [US0] Tạo `frontend/src/services/auth.service.ts` với methods:
+  - login(email, password) → POST /auth/login
+  - logout() → Xóa localStorage
+  - getToken(), getCurrentUser(), isAuthenticated(), isInstructor()
+- [ ] T057 [P] [US0] Tạo `frontend/src/pages/LoginPage.tsx`:
+  - 2 input fields (Email, Password) 
+  - Button submit, loading state, error message
+  - Khi thành công: Lưu token vào localStorage, redirect /courses
+  - Hướng dẫn: Dùng email instructor1@example.com / student1@example.com, password từ seed
+- [ ] T058 [P] [US0] Tạo `frontend/src/components/ProtectedRoute.tsx`:
+  - Kiểm tra isAuthenticated(), redirect /login nếu không
+  - Optional: Kiểm tra role cho route cần role cụ thể
+- [ ] T059 [US0] Cập nhật `frontend/src/utils/axios.ts`:
+  - Interceptor: Thêm Authorization: Bearer <token> header vào tất cả requests
+  - Catch 401: Xóa token, redirect /login
+- [ ] T060 [US0] Cập nhật `frontend/src/App.tsx` routing:
+  - Route công khai: /login
+  - Route bảo vệ: /courses, /admin/courses (INSTRUCTOR only)
+  - / redirect dựa vào isAuthenticated()
+- [ ] T061 [P] [US0] Tạo `frontend/src/components/Navbar.tsx`:
+  - Hiển thị tên user, button logout (gọi auth.logout())
+  - Show/hide dựa vào isAuthenticated()
+
+### Kiểm thử cho User Story 0
+
+- [ ] T062 [P] [US0] Tạo `backend/tests/unit/auth.spec.ts`:
+  - JWT token được tạo với claims (sub, role, exp)
+  - Token hết hạn sau 1 ngày
+  - Token không hợp lệ bị từ chối
+- [ ] T063 [US0] Tạo `backend/tests/integration/auth.spec.ts`:
+  - POST /auth/login với email/password đúng → trả JWT ✓
+  - POST /auth/login email/password sai → 401 ✗
+  - Endpoint bảo vệ không token → 401 ✗
+  - Endpoint bảo vệ có token hợp lệ → 200 ✓
+
+**Checkpoint**: User Story 0 hoàn thành - Người dùng có thể đăng nhập, nhận JWT, dùng trên các endpoint ✅
 
 ---
 
-## Dependencies & Execution Order
+## Tóm tắt Task
 
-- Setup (Phase 1) → Foundational (Phase 2) → User Story 0 (Phase 3) → User Stories 1-3 (Phases 4-6)
-- **IMPORTANT**: US0 (Authentication) must be completed before US1-3 can work properly
-- User stories will still work with basic auth, but JWT protection should be added
-- Polish phase after all user stories complete
+**Tổng số tasks**: 63 (gồm 28 đã hoàn thành + 14 mới cho US0 Login)
 
-## Parallel Execution Examples
+**Các Phase đã hoàn thành**:
+- ✅ Phase 1: Setup (T001-T004) - 4 tasks
+- ✅ Phase 2: Foundational (T005-T010) - 6 tasks
+- ✅ Phase 3: User Story 1 - CRUD khóa học (T011-T017) - 7 tasks
+- ✅ Phase 4: User Story 2 - Xem khóa học xuất bản (T018-T023) - 6 tasks
+- ✅ Phase 5: User Story 3 - Publish toggle (T024-T028) - 5 tasks
 
-- T003, T004 (linting, formatting) can run in parallel
-- T006, T007 (auth, routing) can run in parallel
-- T011, T012, T015 (backend/frontend for US1) can run in parallel
-- T018, T021 (backend/frontend for US2) can run in parallel
-- T024, T027 (backend/frontend for US3) can run in parallel
+**Những task mới**:
+- Phase 7: Documentation (T046-T049) - 4 tasks
+- **🆕 Phase 8: User Story 0 - Đăng nhập JWT (T050-T063)** - 14 NEW tasks ← **Chèn vào cuối**
 
-## Implementation Strategy
+---
 
-- MVP: Hoàn thành US1 (CRUD khóa học cho giảng viên) trước, kiểm thử độc lập
-- Sau đó phát triển US2, US3, mỗi user story đều có thể kiểm thử và triển khai độc lập
+## Thứ tự thực hiện
+
+1. Setup (Phase 1) → Foundational (Phase 2)
+2. US1-3 (Phase 3-5) - Đã hoàn thành ✅
+3. **US0 - Đăng nhập (Phase 8)** - Task mới, thêm JWT login vào hệ thống hiện tại
+4. Documentation (Phase 7)
