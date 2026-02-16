@@ -36,7 +36,18 @@ class AuthService {
 
       return data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Đăng nhập thất bại');
+      // Extract error message properly
+      let errorMessage = 'Đăng nhập thất bại';
+      
+      if (error.response?.data?.message) {
+        const msg = error.response.data.message;
+        // Handle both string and object message formats
+        errorMessage = typeof msg === 'string' ? msg : (msg.message || msg.error || errorMessage);
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      throw new Error(errorMessage);
     }
   }
 
