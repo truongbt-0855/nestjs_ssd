@@ -1,16 +1,10 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
 
 export default function BaseLayout() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-4 flex justify-between">
-        <div className="font-bold text-lg">Course Management</div>
-        <nav className="space-x-4">
-          <Link to="/">Home</Link>
-          <Link to="/courses">Courses</Link>
-          <Link to="/admin/courses">Admin</Link>
-        </nav>
-      </header>
+      <Navbar />
       <main className="flex-1">
         <Outlet />
       </main>
