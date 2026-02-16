@@ -99,36 +99,36 @@ description: "Task list for feature 001-khoa-hoc (Quản lý khóa học đơn g
 
 ### Backend: Xác thực JWT
 
-- [ ] T050 [P] [US0] Cập nhật `backend/src/modules/auth/auth.service.ts`: Thêm login logic, kiểm tra email/password, sinh JWT token (claim: sub, role, exp = 1 ngày)
-- [ ] T051 [P] [US0] Tạo `backend/src/modules/auth/strategies/jwt.strategy.ts`: Validate JWT token via Passport strategy
-- [ ] T052 [P] [US0] Tạo `backend/src/modules/auth/guards/jwt-auth.guard.ts`: Dùng @UseGuards(JwtAuthGuard) để bảo vệ endpoint
-- [ ] T053 [P] [US0] Tạo `backend/src/modules/auth/decorators/current-user.decorator.ts`: Lấy user từ JWT via @CurrentUser()
-- [ ] T054 [US0] Cập nhật `backend/src/modules/auth/auth.controller.ts` - Endpoint login:
+- [X] T050 [P] [US0] Cập nhật `backend/src/modules/auth/auth.service.ts`: Thêm login logic, kiểm tra email/password, sinh JWT token (claim: sub, role, exp = 1 ngày)
+- [X] T051 [P] [US0] Tạo `backend/src/modules/auth/strategies/jwt.strategy.ts`: Validate JWT token via Passport strategy
+- [X] T052 [P] [US0] Tạo `backend/src/modules/auth/guards/jwt-auth.guard.ts`: Dùng @UseGuards(JwtAuthGuard) để bảo vệ endpoint
+- [X] T053 [P] [US0] Tạo `backend/src/modules/auth/decorators/current-user.decorator.ts`: Lấy user từ JWT via @CurrentUser()
+- [X] T054 [US0] Cập nhật `backend/src/modules/auth/auth.controller.ts` - Endpoint login:
   - POST /auth/login: Nhận { email, password }, kiểm tra mật khẩu, tạo JWT, trả về { access_token, user }
-- [ ] T055 [P] [US0] Cập nhật `backend/prisma/seed.ts`: Đảm bảo seed data có password hash cho users (instructor1@example.com/password, student1@example.com/password)
+- [X] T055 [P] [US0] Cập nhật `backend/prisma/seed.ts`: Đảm bảo seed data có password hash cho users (instructor1@example.com/password, student1@example.com/password)
 
 ### Frontend: Login UI & Service
 
-- [ ] T056 [P] [US0] Tạo `frontend/src/services/auth.service.ts` với methods:
+- [X] T056 [P] [US0] Tạo `frontend/src/services/auth.service.ts` với methods:
   - login(email, password) → POST /auth/login
   - logout() → Xóa localStorage
   - getToken(), getCurrentUser(), isAuthenticated(), isInstructor()
-- [ ] T057 [P] [US0] Tạo `frontend/src/pages/LoginPage.tsx`:
+- [X] T057 [P] [US0] Tạo `frontend/src/pages/LoginPage.tsx`:
   - 2 input fields (Email, Password) 
   - Button submit, loading state, error message
   - Khi thành công: Lưu token vào localStorage, redirect /courses
   - Hướng dẫn: Dùng email instructor1@example.com / student1@example.com, password từ seed
-- [ ] T058 [P] [US0] Tạo `frontend/src/components/ProtectedRoute.tsx`:
+- [X] T058 [P] [US0] Tạo `frontend/src/components/ProtectedRoute.tsx`:
   - Kiểm tra isAuthenticated(), redirect /login nếu không
   - Optional: Kiểm tra role cho route cần role cụ thể
-- [ ] T059 [US0] Cập nhật `frontend/src/utils/axios.ts`:
+- [X] T059 [US0] Cập nhật `frontend/src/utils/axios.ts`:
   - Interceptor: Thêm Authorization: Bearer <token> header vào tất cả requests
   - Catch 401: Xóa token, redirect /login
-- [ ] T060 [US0] Cập nhật `frontend/src/App.tsx` routing:
+- [X] T060 [US0] Cập nhật `frontend/src/App.tsx` routing:
   - Route công khai: /login
   - Route bảo vệ: /courses, /admin/courses (INSTRUCTOR only)
   - / redirect dựa vào isAuthenticated()
-- [ ] T061 [P] [US0] Tạo `frontend/src/components/Navbar.tsx`:
+- [X] T061 [P] [US0] Tạo `frontend/src/components/Navbar.tsx`:
   - Hiển thị tên user, button logout (gọi auth.logout())
   - Show/hide dựa vào isAuthenticated()
 
