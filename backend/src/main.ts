@@ -1,6 +1,7 @@
 
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ApiResponseFormatMiddleware } from './middleware/api-response-format.middleware';
@@ -39,6 +40,33 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
   
+  // Swagger API Documentation
+  const config = new DocumentBuilder()
+    .setTitle('Course Management API')
+    .setDescription('API documentation for Course Management System')
+    .setVersion('1.0')
+    .addTag('auth', 'Authentication endpoints')
+    .addTag('courses', 'Course management endpoints')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth', // This name here is the name used in @ApiBearerAuth()
+    )
+    .build();
+  
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document, {
+    customSiteTitle: 'Course Management API Docs',
+    customfavIcon: 'https://nestjs.com/img/logo_text.svg',
+    customCss: '.swagger-ui .topbar { display: none }',
+  });
+  
   // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
@@ -54,5 +82,6 @@ async function bootstrap() {
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
   console.log(`🚀 Application is running on: http://localhost:${port}`);
+  console.log(`📚 API Documentation: http://localhost:${port}/api-docs`);
 }
 bootstrap();
