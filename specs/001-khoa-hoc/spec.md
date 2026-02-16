@@ -28,18 +28,26 @@
 
 
 
-### User Story 0 - User login (Priority: P0)
+### User Story 0 - User Registration & Login with JWT (Priority: Priority: P0)
 
-Người dùng (giảng viên/học viên) có thể đăng nhập vào hệ thống để sử dụng các chức năng phù hợp với vai trò.
+Người dùng (giảng viên/học viên) có thể đăng ký tài khoản mới và đăng nhập vào hệ thống bằng email/mật khẩu, nhận JWT token để sử dụng các chức năng phù hợp với vai trò.
 
-**Why this priority**: Đăng nhập là điều kiện tiên quyết để phân quyền và bảo vệ dữ liệu, đảm bảo chỉ người dùng hợp lệ mới truy cập được chức năng quản lý hoặc xem khóa học.
+**Why this priority**: Đăng nhập với JWT là điều kiện tiên quyết để phân quyền dựa trên role (INSTRUCTOR/STUDENT) và bảo vệ dữ liệu, đảm bảo chỉ người dùng hợp lệ mới truy cập được chức năng quản lý hoặc xem khóa học.
 
-**Independent Test**: Người dùng đăng nhập thành công với tài khoản hợp lệ, thất bại với tài khoản sai; sau khi đăng nhập, giao diện và API phản hồi đúng theo vai trò.
+**Independent Test**: 
+- Người dùng đăng ký tài khoản mới thành công
+- Đăng nhập thành công với tài khoản hợp lệ nhận được JWT token
+- Thất bại với tài khoản/mật khẩu sai
+- Sử dụng JWT token để truy cập endpoints bảo vệ
+- Token hết hạn hoặc không hợp lệ bị từ chối truy cập
 
 **Acceptance Scenarios**:
-1. **Given** người dùng có tài khoản hợp lệ, **When** đăng nhập, **Then** truy cập được các chức năng phù hợp với vai trò.
-2. **Given** người dùng nhập sai thông tin, **When** đăng nhập, **Then** nhận được thông báo lỗi.
-3. **Given** chưa đăng nhập, **When** truy cập chức năng quản lý hoặc xem khóa học, **Then** bị chuyển hướng hoặc từ chối truy cập.
+1. **Given** người dùng chưa có tài khoản, **When** đăng ký với email/mật khẩu/role, **Then** tài khoản được tạo thành công.
+2. **Given** người dùng có tài khoản hợp lệ, **When** đăng nhập, **Then** nhận được JWT token có thể dùng để truy cập các chức năng phù hợp với vai trò.
+3. **Given** người dùng nhập sai email hoặc mật khẩu, **When** đăng nhập, **Then** nhận được thông báo lỗi "Invalid credentials".
+4. **Given** token JWT hợp lệ, **When** gửi request kèm `Authorization: Bearer <token>`, **Then** API trả về dữ liệu đúng theo vai trò.
+5. **Given** token JWT không hợp lệ/hết hạn, **When** gửi request, **Then** API từ chối với mã 401 Unauthorized.
+6. **Given** chưa đăng nhập (không có token), **When** truy cập endpoint bảo vệ, **Then** bị chuyển hướng tới trang login hoặc trả về 401.
 
 Giảng viên có thể tạo mới, chỉnh sửa, và xóa khóa học của mình thông qua giao diện quản trị.
 
@@ -101,20 +109,88 @@ Giảng viên có thể chuyển đổi trạng thái xuất bản của khóa h
 
 
 ### Functional Requirements
-- **FR-000**: Hệ thống phải cho phép người dùng (giảng viên/học viên) đăng nhập bằng tài khoản hợp lệ.
-- **FR-001**: Hệ thống phải cho phép giảng viên tạo mới khóa học.
-- **FR-002**: Hệ thống phải cho phép giảng viên sửa thông tin khóa học của mình.
-- **FR-003**: Hệ thống phải cho phép giảng viên xóa khóa học của mình.
-- **FR-004**: Hệ thống phải cho phép giảng viên chuyển đổi trạng thái xuất bản của khóa học.
-- **FR-005**: Hệ thống phải cho phép học viên xem danh sách các khóa học đã xuất bản.
-- **FR-006**: Tất cả API trả về dữ liệu theo format `{ "data": ..., "message": "..." }`.
-- **FR-007**: Database sử dụng UUID làm khóa chính cho bảng khóa học.
-- **FR-008**: Hệ thống phải kiểm tra quyền sở hữu khi giảng viên thao tác với khóa học.
+
+#### Authentication & Authorization (JWT)
+- **FR-000**: Hệ thống phải cung cấp endpoint đăng ký tài khoản mới với email, mật khẩu, và role (INSTRUCTOR/STUDENT).
+- **FR-001**: Hệ thống phải cung cấp endpoint đăng nhập với email/mật khẩu, trả về JWT token nếu thành công.
+- **FR-002**: JWT token phải chứa thông tin: `sub` (user ID), `role` (INSTRUCTOR/STUDENT), và `expiresIn` (1 ngày).
+- **FR-003**: Hệ thống phải xác thực JWT token từ header `Authorization: Bearer <token>` trên tất cả endpoint bảo vệ.
+- **FR-004**: Hệ thống phải từ chối request với token không hợp lệ/hết hạn, trả về HTTP 401 Unauthorized.
+- **FR-005**: Hệ thống phải kiểm tra role của user trước khi cho phép truy cập endpoint yêu cầu role cụ thể (ví dụ: chỉ INSTRUCTOR mới tạo được khóa học).
+- **FR-006**: Mật khẩu người dùng phải được hash trước khi lưu vào database (sử dụng bcrypt).
+
+#### Course Management
+- **FR-007**: Hệ thống phải cho phép giảng viên (INSTRUCTOR) tạo mới khóa học.
+- **FR-008**: Hệ thống phải cho phép giảng viên sửa thông tin khóa học của mình.
+- **FR-009**: Hệ thống phải cho phép giảng viên xóa khóa học của mình.
+- **FR-010**: Hệ thống phải cho phép giảng viên chuyển đổi trạng thái xuất bản của khóa học (publish/unpublish).
+- **FR-011**: Hệ thống phải cho phép học viên (STUDENT) xem danh sách các khóa học đã xuất bản (status = PUBLISHED).
+- **FR-012**: Hệ thống phải kiểm tra quyền sở hữu: giảng viên chỉ có thể sửa/xóa khóa học của mình (khóa học mà họ tạo ra).
+
+#### API Response Format
+- **FR-013**: Tất cả API phải trả về dữ liệu theo format chuẩn: `{ "data": <data>, "message": "<success/error message>" }`.
+- **FR-014**: Lỗi API không hợp lệ phải trả về HTTP status code thích hợp (400, 401, 403, 404, 500, etc.).
+
+#### Database Schema
+- **FR-015**: Database sử dụng UUID (v4) làm khóa chính cho tất cả bảng.
+- **FR-016**: Bảng `users` phải lưu: id, email (unique), password (hashed), name, role (ENUM: INSTRUCTOR/STUDENT), createdAt, updatedAt.
+- **FR-017**: Bảng `courses` phải lưu: id, title, description, status (ENUM: DRAFT/PUBLISHED), ownerId (FK → users), createdAt, updatedAt.
 
 
 ### Key Entities
-- **Course**: Đại diện cho một khóa học, gồm các thuộc tính: id (UUID), title, description, status (published/unpublished), ownerId (giảng viên tạo), createdAt, updatedAt.
-- **User**: Đại diện cho người dùng hệ thống, gồm các thuộc tính: id (UUID), name, role (instructor/student), ...
+
+#### User
+Đại diện cho người dùng hệ thống:
+- `id` (UUID, primary key)
+- `email` (string, unique) - Đăng nhập với email
+- `password` (string, hashed with bcrypt) - Mật khẩu được hash
+- `name` (string) - Tên người dùng
+- `role` (ENUM: INSTRUCTOR | STUDENT) - Vai trò trong hệ thống
+- `createdAt` (timestamp) - Thời gian tạo tài khoản
+- `updatedAt` (timestamp) - Thời gian cập nhật cuối cùng
+
+#### Course
+Đại diện cho một khóa học:
+- `id` (UUID, primary key)
+- `title` (string) - Tên khóa học
+- `description` (string) - Mô tả chi tiết khóa học
+- `status` (ENUM: DRAFT | PUBLISHED) - Trạng thái xuất bản
+  - DRAFT: Chưa xuất bản, chỉ giảng viên thấy
+  - PUBLISHED: Đã xuất bản, học viên có thể xem
+- `ownerId` (UUID, FK → users) - ID giảng viên tạo khóa học
+- `createdAt` (timestamp) - Ngày tạo
+- `updatedAt` (timestamp) - Ngày cập nhật cuối
+
+#### JWT Token
+Cấu trúc JWT token sau khi đăng nhập:
+- `sub` (string) - User ID
+- `role` (string) - Vai trò: INSTRUCTOR hoặc STUDENT
+- `iat` (number) - Issued at timestamp
+- `exp` (number) - Expiration timestamp (1 ngày sau iat)
+
+Ví dụ payload:
+```json
+{
+  "sub": "550e8400-e29b-41d4-a716-446655440000",
+  "role": "INSTRUCTOR",
+  "iat": 1676500000,
+  "exp": 1676586400
+}
+```
+
+#### Login Response
+Phản hồi từ endpoint `/auth/login`:
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "email": "instructor@example.com",
+    "name": "Instructor Name",
+    "role": "INSTRUCTOR"
+  }
+}
+```
 
 ## Success Criteria *(mandatory)*
 
@@ -126,8 +202,27 @@ Giảng viên có thể chuyển đổi trạng thái xuất bản của khóa h
 
 
 ### Measurable Outcomes
-- **SC-000**: 100% chức năng quản lý/xem khóa học đều yêu cầu xác thực đăng nhập; người dùng không đăng nhập không thể truy cập các chức năng này.
-- **SC-001**: Giảng viên có thể tạo/sửa/xóa khóa học thành công trong vòng 1 phút cho mỗi thao tác.
-- **SC-002**: Học viên luôn nhìn thấy danh sách khóa học đã xuất bản đúng với trạng thái thực tế (không trễ quá 5 giây sau khi thay đổi trạng thái xuất bản).
-- **SC-003**: 100% thao tác không hợp lệ (ví dụ: sửa/xóa khóa học không thuộc quyền sở hữu) đều bị từ chối với thông báo rõ ràng.
-- **SC-004**: 95% người dùng thực hiện thành công các thao tác chính ngay lần thử đầu tiên.
+
+#### Authentication & Security
+- **SC-000**: 100% request tới endpoint bảo vệ đều yêu cầu header `Authorization` chứa JWT token hợp lệ; request không có token hoặc token không hợp lệ bị từ chối (401 Unauthorized).
+- **SC-001**: Đăng nhập thành công nhận được JWT token trong 200ms.
+- **SC-002**: JWT token hết hạn sau đúng 1 ngày (86400 giây) từ lúc phát hành.
+- **SC-003**: 100% mật khẩu người dùng được hash trước khi lưu, không lưu plain text.
+- **SC-004**: Đăng nhập với mật khẩu sai bị từ chối ngay lập tức với thông báo lỗi generic (không bộc lộ thông tin người dùng).
+
+#### Authorization (Role-Based Access Control)
+- **SC-005**: 100% endpoint yêu cầu INSTRUCTOR (create/update/delete/publish) bị từ chối nếu user có role STUDENT.
+- **SC-006**: 100% endpoint yêu cầu STUDENT logic (xem published courses) bị từ chối nếu user chưa đăng nhập.
+- **SC-007**: Giảng viên chỉ có thể sửa/xóa/publish khóa học của mình (quyền sở hữu); cố gắng sửa khóa học của người khác bị từ chối (403 Forbidden).
+
+#### Course Management Performance
+- **SC-008**: Giảng viên có thể tạo/sửa/xóa khóa học thành công trong vòng 1 phút cho mỗi thao tác.
+- **SC-009**: Học viên luôn nhìn thấy danh sách khóa học đã xuất bản đúng với trạng thái thực tế (không trễ quá 5 giây sau khi thay đổi trạng thái xuất bản).
+- **SC-010**: 100% thao tác không hợp lệ (ví dụ: sửa/xóa khóa học không thuộc quyền sở hữu, gửi dữ liệu không hợp lệ) đều bị từ chối với thông báo lỗi rõ ràng.
+- **SC-011**: 95% người dùng thực hiện thành công các thao tác chính ngay lần thử đầu tiên.
+
+#### User Experience
+- **SC-012**: Frontend tự động lưu JWT token vào localStorage sau khi đăng nhập thành công.
+- **SC-013**: Frontend tự động gửi JWT token trong header `Authorization` cho tất cả request API.
+- **SC-014**: Frontend tự động chuyển hướng người dùng tới trang login nếu token hết hạn hoặc không hợp lệ.
+- **SC-015**: Đăng xuất xóa JWT token khỏi localStorage, người dùng trở lại trạng thái chưa đăng nhập.
