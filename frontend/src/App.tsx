@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import BaseLayout from './components/BaseLayout';
-import HomePage from './pages/HomePage';
 import CoursesPage from './pages/CoursesPage';
 import AdminCoursesPage from './pages/admin/courses/AdminCoursesPage';
 import LoginPage from './pages/LoginPage';
