@@ -31,7 +31,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- `Architecture Gate`: Backend design uses NestJS module-based boundaries for each domain feature.
+- `Data Gate`: Persistence layer is Prisma + PostgreSQL only; no TypeORM/Sequelize introduced.
+- `Typing Gate`: Strict TypeScript assumptions are preserved; all API contracts define DTOs and
+  async signatures as `Promise<T>`.
+- `Monetary Safety Gate`: Any money/payment flow defines Prisma Interactive Transaction boundaries,
+  including rollback behavior.
+- `Error Handling Gate`: Error path is centralized through ExceptionFilter; controllers do not add
+  ad-hoc try-catch blocks for generic handling.
+- `Frontend Gate`: UI styling uses Tailwind CSS; if using Next.js, SSR is specified where business
+  pages require server-rendered data.
+
+If any gate fails, plan MUST document a blocking issue or constitutional amendment before build.
 
 ## Project Structure
 

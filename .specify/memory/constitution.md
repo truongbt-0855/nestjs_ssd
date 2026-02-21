@@ -1,50 +1,91 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: 0.0.0-template → 1.0.0
+- Modified principles:
+	- Template Principle 1 → I. NestJS Module-First Architecture
+	- Template Principle 2 → II. Prisma + PostgreSQL Only
+	- Template Principle 3 → III. Strict TypeScript API Contracts
+	- Template Principle 4 → IV. Monetary Safety via Interactive Transactions
+	- Template Principle 5 → V. Centralized Error Handling & SSR UI Discipline
+- Added sections:
+	- Technical Standards & Constraints
+	- Development Workflow & Quality Gates
+- Removed sections:
+	- None
+- Templates requiring updates:
+	- ✅ .specify/templates/plan-template.md
+	- ✅ .specify/templates/spec-template.md
+	- ✅ .specify/templates/tasks-template.md
+	- ⚠ pending: .specify/templates/commands/*.md (directory not present)
+	- ⚠ pending: README.md, docs/quickstart.md (files not present)
+- Follow-up TODOs:
+	- None
+-->
+
+# NestJS SSD Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. NestJS Module-First Architecture
+Mọi backend service MUST được tổ chức theo kiến trúc module-based của NestJS. Tính năng mới
+MUST được đặt trong module rõ ràng (controller, service, provider, DTO liên quan), không dùng
+cấu trúc file phẳng hoặc trộn tầng kiến trúc. Rationale: module boundary tạo khả năng mở rộng,
+kiểm thử độc lập, và giảm coupling giữa miền nghiệp vụ.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Prisma + PostgreSQL Only
+Tầng truy cập dữ liệu MUST chỉ dùng Prisma với PostgreSQL. TypeORM, Sequelize, hoặc ORM/driver
+thay thế cho domain persistence MUST NOT được đưa vào codebase. Rationale: đồng nhất công cụ
+tránh phân mảnh migration/runtime behavior và đơn giản hóa vận hành.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Strict TypeScript API Contracts
+Codebase MUST chạy ở chế độ Strict TypeScript. Mọi API endpoint MUST dùng DTO cho input/output,
+và chữ ký service/controller async MUST khai báo kiểu trả về tường minh dạng Promise<T>.
+Rationale: hợp đồng kiểu chặt giúp phát hiện lỗi sớm và giữ API nhất quán giữa các team.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Monetary Safety via Interactive Transactions
+Mọi nghiệp vụ tiền tệ/thanh toán MUST thực thi trong Prisma Interactive Transactions; cập nhật
+số dư, trạng thái thanh toán, và ledger liên quan MUST nằm trong cùng transaction scope. Bất kỳ
+flow tiền tệ nào không dùng interactive transaction được xem là vi phạm nghiêm trọng. Rationale:
+đảm bảo tính nguyên tử và nhất quán dữ liệu tài chính.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Centralized Error Handling & SSR UI Discipline
+Toàn bộ lỗi ứng dụng backend MUST đi qua ExceptionFilter tập trung; controller MUST NOT chứa
+try-catch tùy tiện để nuốt hoặc phân tán xử lý lỗi. Ở frontend, style MUST dùng Tailwind CSS;
+nếu dùng Next.js thì rendering strategy MUST dùng Server Side Rendering cho các trang nghiệp vụ.
+Rationale: xử lý lỗi tập trung tăng khả năng quan sát, còn SSR + Tailwind giữ UX nhất quán và
+đáp ứng yêu cầu kiến trúc hiển thị.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technical Standards & Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Backend framework MUST là NestJS và theo module boundary rõ ràng theo domain.
+- Data access MUST dùng Prisma schema, migration, và client thống nhất trong backend.
+- Mọi endpoint MUST có DTO class riêng cho request/response khi có payload.
+- Service methods bất đồng bộ MUST khai báo Promise<T> tường minh, không để inferred any.
+- Các giao dịch thanh toán MUST có test chứng minh rollback khi lỗi giữa chừng.
+- Frontend MUST dùng Tailwind tokens/config hiện hữu; không trộn framework CSS khác.
+- Với Next.js, trang cần dữ liệu thời gian thực nghiệp vụ MUST dùng SSR thay vì chỉ CSR.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow & Quality Gates
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Plan/Spec/Tasks MUST chứa mục kiểm tra tuân thủ 5 nguyên tắc cốt lõi trước khi implement.
+- Pull request MUST nêu rõ module bị tác động, DTO thêm/sửa, và transaction boundary nếu có tiền.
+- Code review MUST từ chối thay đổi vi phạm ORM policy, transaction policy, hoặc error policy.
+- Trước merge, nhóm phát triển MUST xác nhận backend errors đi qua ExceptionFilter và type strict
+	không bị nới lỏng trong tsconfig.
+- Mọi exception đối với hiến pháp MUST được ghi thành amendment, không xử lý bằng thỏa thuận miệng.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Constitution này có hiệu lực cao hơn các hướng dẫn phát triển khác trong repository. Đề xuất sửa
+đổi MUST đi kèm phạm vi ảnh hưởng, lý do nghiệp vụ/kỹ thuật, và kế hoạch chuyển đổi.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- Amendment Process: thay đổi MUST được phê duyệt qua PR có ít nhất 1 reviewer chịu trách nhiệm
+	kiến trúc backend và 1 reviewer chịu trách nhiệm dữ liệu nếu liên quan persistence/tài chính.
+- Versioning Policy (SemVer):
+	- MAJOR khi xóa/định nghĩa lại nguyên tắc theo cách không tương thích ngược.
+	- MINOR khi thêm nguyên tắc hoặc mở rộng bắt buộc làm thay đổi quy trình thực thi.
+	- PATCH khi chỉ làm rõ câu chữ, sửa diễn đạt, hoặc chỉnh phi ngữ nghĩa.
+- Compliance Review: mọi PR MUST có checklist tuân thủ hiến pháp; release review định kỳ MUST
+	kiểm tra ngẫu nhiên module backend, Prisma transaction flow, DTO coverage, và ExceptionFilter.
+
+**Version**: 1.0.0 | **Ratified**: 2026-02-21 | **Last Amended**: 2026-02-21

@@ -90,6 +90,16 @@
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
+### Constitution Alignment *(mandatory)*
+
+- **CA-001 Architecture**: Backend design MUST follow NestJS module-based structure.
+- **CA-002 Data**: Data layer MUST use Prisma with PostgreSQL only.
+- **CA-003 Typing**: APIs MUST define DTOs and async return types as Promise<T>.
+- **CA-004 Monetary Transactions**: Money/payment flows MUST use Prisma Interactive Transactions.
+- **CA-005 Error Handling**: Application errors MUST flow through centralized ExceptionFilter.
+- **CA-006 Frontend**: UI MUST use Tailwind CSS; when using Next.js, SSR requirements MUST be
+  explicitly stated per page/route.
+
 *Example of marking unclear requirements:*
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
