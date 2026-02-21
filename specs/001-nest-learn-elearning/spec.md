@@ -77,6 +77,11 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - Student đã mua khóa học nhưng video của một bài học chưa nén xong: Student vẫn thấy khóa học đã sở hữu, bài học đó hiển thị trạng thái đang xử lý.
 - Dữ liệu danh sách khóa học hoặc giao dịch quá lớn: phân trang phải tiếp tục ổn định bằng cursor, không lặp hoặc bỏ sót bản ghi khi người dùng tải trang kế tiếp.
 - Event gửi email bị xử lý lặp do retry: hệ thống phải đảm bảo một giao dịch chỉ gửi tối đa một email xác nhận thành công.
+- Frontend cấu hình sai `API_URL` trong `.env`: hệ thống phải trả lỗi rõ ràng ở tầng gọi API và không có cơ chế fallback gọi trực tiếp DB.
+- `docker-compose` được chạy từ root nhưng thiếu service dùng chung (Postgres/Redis): môi trường local phải fail-fast với thông báo service thiếu.
+- Queue xử lý tác vụ nền bị nghẽn hoặc gián đoạn: tác vụ email/nén video phải có trạng thái theo dõi và cơ chế retry có kiểm soát.
+- Token JWT hết hạn hoặc không hợp lệ: mọi API bảo vệ phải từ chối truy cập nhất quán và không rò rỉ dữ liệu.
+- Seed migration chạy lại nhiều lần: không tạo trùng 3 tài khoản mẫu và không phá vỡ dữ liệu hiện có.
 
 ## Requirements *(mandatory)*
 
@@ -100,10 +105,23 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - **FR-011**: Admin MUST xem được thống kê doanh thu tổng quan và doanh thu theo khóa học trong phạm vi thời gian chọn.
 - **FR-012**: Hệ thống MUST chỉ cho phép Student truy cập bài học của các khóa học đã sở hữu.
 - **FR-013**: Hệ thống MUST đảm bảo mỗi giao dịch mua chỉ được ghi nhận thành công tối đa một lần cho cùng một yêu cầu mua.
-- **FR-014**: Hệ thống MUST cung cấp tài liệu API đầy đủ trên Swagger cho các endpoint thuộc phạm vi feature.
+- **FR-014**: Hệ thống MUST cung cấp tài liệu Swagger đầy đủ cho toàn bộ REST API endpoint thuộc phạm vi feature.
 - **FR-015**: Các endpoint trả danh sách dữ liệu lớn (ví dụ khóa học, bài học, giao dịch) MUST dùng cơ chế phân trang cursor-based.
 - **FR-016**: Hệ thống MUST vận hành theo cơ chế event-driven cho hậu xử lý sau thanh toán; chỉ khi thanh toán thành công mới kích hoạt gửi email và các tác vụ liên quan.
 - **FR-017**: Hệ thống MUST đảm bảo tính idempotent cho consumer xử lý event hậu thanh toán để tránh xử lý trùng.
+- **FR-018**: Toàn bộ hệ thống MUST được tổ chức theo chiến lược monorepo và quản lý đa dự án bằng NPM Workspaces hoặc PNPM Workspaces.
+- **FR-019**: Frontend MUST chỉ giao tiếp dữ liệu qua Backend API, MUST NOT truy cập trực tiếp database dưới bất kỳ hình thức nào.
+- **FR-020**: Frontend MUST dùng biến môi trường `.env` để cấu hình URL Backend API theo từng môi trường.
+- **FR-021**: Hệ thống SHOULD trích xuất DTO hoặc interface dùng chung vào thư mục shared để frontend/backend tái sử dụng khi phù hợp.
+- **FR-022**: Hệ thống MUST đặt file `docker-compose.yml` tại root repository để quản lý tập trung Postgres và Redis cho toàn bộ hệ thống.
+- **FR-023**: Backend MUST chịu trách nhiệm toàn bộ xử lý logic nghiệp vụ, truy cập database, và điều phối queue cho các tác vụ nền.
+- **FR-024**: Frontend MUST chịu trách nhiệm trình bày giao diện người dùng và sử dụng Tailwind CSS cho toàn bộ giao diện trong phạm vi feature.
+- **FR-025**: Frontend và Backend MUST giao tiếp qua REST API contracts được mô tả trên Swagger; frontend không dùng kênh giao tiếp dữ liệu nào khác.
+- **FR-026**: Backend MUST được xây dựng bằng NestJS, sử dụng Passport JWT cho xác thực API bảo vệ.
+- **FR-027**: Backend MUST dùng `@nestjs/bullmq` với Redis cho queue tác vụ nền và dùng `@nestjs/event-emitter` cho phát/nhận sự kiện nội bộ.
+- **FR-028**: Database MUST là PostgreSQL chạy qua Docker và truy cập bằng Prisma ORM.
+- **FR-029**: Frontend MUST dùng Next.js App Router, Tailwind CSS, và Lucide Icons cho giao diện thuộc phạm vi feature.
+- **FR-030**: Hệ thống MUST seed sẵn 3 tài khoản mẫu (Admin, Instructor, Student) vào database ngay khi khởi tạo migration.
 
 ### Constitution Alignment *(mandatory)*
 
@@ -117,6 +135,8 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - Dữ liệu seed đã bao gồm người dùng mẫu cho 3 vai trò và tối thiểu một số khóa học/video mẫu để test luồng.
 - Email xác nhận mua hàng dùng mẫu nội dung chuẩn và gửi theo cơ chế tự động không yêu cầu người dùng thao tác thêm.
 - Nén video nền là xử lý bất đồng bộ sau khi video được tải lên và có thể hoàn tất sau thời điểm khóa học được tạo.
+- Cấu trúc repo hiện tại cho phép tổ chức theo workspace và có thể thêm package shared types nếu cần.
+- Cấu hình môi trường có sẵn Redis instance phục vụ BullMQ worker/producer.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -128,6 +148,7 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - **PurchaseTransaction**: Giao dịch mua khóa học, lưu số tiền, trạng thái, thời gian, và liên kết tới Student/Course.
 - **RevenueReport**: Tập số liệu tổng hợp doanh thu cho Admin theo mốc thời gian và theo khóa học.
 - **EmailNotification**: Bản ghi sự kiện gửi email xác nhận mua hàng và trạng thái gửi.
+- **QueueJob**: Công việc nền cho email xác nhận hoặc nén video, gồm trạng thái xử lý, số lần retry, và thời điểm xử lý tiếp theo.
 
 ## Success Criteria *(mandatory)*
 
@@ -147,3 +168,10 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - **SC-007**: 100% endpoint trong phạm vi feature có mô tả và ví dụ request/response trong tài liệu API.
 - **SC-008**: 99% yêu cầu duyệt dữ liệu lớn bằng phân trang cursor trả về trang kế tiếp hợp lệ mà không trùng hoặc mất bản ghi.
 - **SC-009**: 100% email xác nhận mua chỉ được kích hoạt sau khi giao dịch ở trạng thái thành công.
+- **SC-010**: 100% request dữ liệu từ frontend đi qua Backend API endpoint đã công bố; không có truy cập DB trực tiếp từ frontend.
+- **SC-011**: 100% môi trường chạy (dev/staging/prod) cấu hình URL API cho frontend bằng biến `.env` hợp lệ.
+- **SC-012**: Môi trường local có thể khởi động Postgres và Redis bằng một lệnh từ root thông qua `docker-compose.yml`.
+- **SC-013**: 99% tác vụ nền được xử lý thành công qua queue trong ngưỡng thời gian dịch vụ đã cam kết cho hệ thống.
+- **SC-014**: 100% tương tác dữ liệu giữa frontend-backend tuân theo REST endpoints đã được công bố trên Swagger.
+- **SC-015**: Sau khi chạy khởi tạo database lần đầu, hệ thống có đúng 3 tài khoản mẫu hoạt động cho Admin/Instructor/Student.
+- **SC-016**: 100% endpoint yêu cầu xác thực từ chối request không có JWT hợp lệ.
