@@ -3,17 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start:dev": "echo \"Nest backend scaffold pending phase 2\"",
+    "start:dev": "nest start --watch",
+    "start": "nest start",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force"
   },
   "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/bullmq": "^11.0.2",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/event-emitter": "^3.0.1",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.4",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.0.6",
     "@prisma/client": "^6.4.1",
     "bcryptjs": "^2.4.3"
+    ,"class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "bullmq": "^5.58.5",
+    "ioredis": "^5.6.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "@types/passport-jwt": "^4.0.1",
     "prisma": "^6.4.1",
     "tsx": "^4.19.2",
     "typescript": "^5.8.2"
