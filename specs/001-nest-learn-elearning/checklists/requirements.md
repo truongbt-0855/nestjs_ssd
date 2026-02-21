@@ -32,5 +32,6 @@
 ## Notes
 
 - Validation iteration 1: PASS all checklist items.
+- Validation iteration 2: PASS after adding API documentation, cursor-based pagination, and event-driven post-payment requirements.
 - No clarification questions required.
 - Ready for next phase: `/speckit.plan`.

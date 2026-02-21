@@ -64,10 +64,9 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 1. **Given** giao dịch mua khóa học thành công, **When** hệ thống hoàn tất xử lý giao dịch, **Then** email xác nhận mua được gửi tự động cho Student.
 2. **Given** Instructor có bài học video mới, **When** hệ thống tiếp nhận video, **Then** tác vụ nén video được đưa vào xử lý nền và cập nhật trạng thái hoàn tất khi xong.
 3. **Given** có dữ liệu giao dịch mua trong hệ thống, **When** Admin mở màn hình thống kê, **Then** Admin xem được tổng doanh thu và doanh thu theo khóa học trong khoảng thời gian được chọn.
+4. **Given** giao dịch mua đã được xác nhận thành công, **When** sự kiện mua hoàn tất được phát hành, **Then** luồng gửi email được kích hoạt từ event và không chạy trước khi thanh toán hoàn tất.
 
 ---
-
-[Add more user stories as needed, each with an assigned priority]
 
 ### Edge Cases
 
@@ -76,6 +75,8 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - Video nén nền thất bại: bài học giữ trạng thái chưa sẵn sàng chất lượng tối ưu và có thể retry mà không mất metadata bài học.
 - Instructor cố xuất bản khóa học không có bài học video hợp lệ: hệ thống từ chối xuất bản và trả thông báo rõ ràng.
 - Student đã mua khóa học nhưng video của một bài học chưa nén xong: Student vẫn thấy khóa học đã sở hữu, bài học đó hiển thị trạng thái đang xử lý.
+- Dữ liệu danh sách khóa học hoặc giao dịch quá lớn: phân trang phải tiếp tục ổn định bằng cursor, không lặp hoặc bỏ sót bản ghi khi người dùng tải trang kế tiếp.
+- Event gửi email bị xử lý lặp do retry: hệ thống phải đảm bảo một giao dịch chỉ gửi tối đa một email xác nhận thành công.
 
 ## Requirements *(mandatory)*
 
@@ -99,6 +100,10 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - **FR-011**: Admin MUST xem được thống kê doanh thu tổng quan và doanh thu theo khóa học trong phạm vi thời gian chọn.
 - **FR-012**: Hệ thống MUST chỉ cho phép Student truy cập bài học của các khóa học đã sở hữu.
 - **FR-013**: Hệ thống MUST đảm bảo mỗi giao dịch mua chỉ được ghi nhận thành công tối đa một lần cho cùng một yêu cầu mua.
+- **FR-014**: Hệ thống MUST cung cấp tài liệu API đầy đủ trên Swagger cho các endpoint thuộc phạm vi feature.
+- **FR-015**: Các endpoint trả danh sách dữ liệu lớn (ví dụ khóa học, bài học, giao dịch) MUST dùng cơ chế phân trang cursor-based.
+- **FR-016**: Hệ thống MUST vận hành theo cơ chế event-driven cho hậu xử lý sau thanh toán; chỉ khi thanh toán thành công mới kích hoạt gửi email và các tác vụ liên quan.
+- **FR-017**: Hệ thống MUST đảm bảo tính idempotent cho consumer xử lý event hậu thanh toán để tránh xử lý trùng.
 
 ### Constitution Alignment *(mandatory)*
 
@@ -139,3 +144,6 @@ Sau khi mua thành công, hệ thống tự gửi email xác nhận cho Student 
 - **SC-004**: 95% email xác nhận mua được gửi trong vòng 5 phút sau khi giao dịch thành công.
 - **SC-005**: 95% video bài học mới tải lên được chuyển sang trạng thái nén hoàn tất trong vòng 30 phút.
 - **SC-006**: Admin có thể xem báo cáo doanh thu tổng quan và theo khóa học cho bất kỳ khoảng thời gian nào với tỷ lệ truy vấn thành công 99%.
+- **SC-007**: 100% endpoint trong phạm vi feature có mô tả và ví dụ request/response trong tài liệu API.
+- **SC-008**: 99% yêu cầu duyệt dữ liệu lớn bằng phân trang cursor trả về trang kế tiếp hợp lệ mà không trùng hoặc mất bản ghi.
+- **SC-009**: 100% email xác nhận mua chỉ được kích hoạt sau khi giao dịch ở trạng thái thành công.
