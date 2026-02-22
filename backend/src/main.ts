@@ -6,6 +6,12 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  const port = 8000;
+
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,7 +33,7 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(3000);
+  await app.listen(port);
 }
 
 void bootstrap();

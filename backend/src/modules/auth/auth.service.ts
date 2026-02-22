@@ -1,38 +1,34 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { LoginDto, LoginResponseDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   async login(payload: LoginDto): Promise<LoginResponseDto> {
-    const allowedEmails = new Set([
-      'admin@nestlearn.local',
-      'instructor@nestlearn.local',
-      'student@nestlearn.local',
-    ]);
+    const user = await this.prisma.user.findUnique({
+      where: { email: payload.email },
+    });
 
-    if (!allowedEmails.has(payload.email)) {
+    if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(payload.password, await bcrypt.hash(payload.password, 10));
+    const isPasswordValid = await bcrypt.compare(payload.password, user.passwordHash);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const role = payload.email.startsWith('admin')
-      ? 'ADMIN'
-      : payload.email.startsWith('instructor')
-        ? 'INSTRUCTOR'
-        : 'STUDENT';
-
     const accessToken = await this.jwtService.signAsync({
-      sub: payload.email,
-      email: payload.email,
-      role,
+      sub: user.id,
+      email: user.email,
+      role: user.role,
     });
 
     return {

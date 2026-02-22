@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -59,7 +59,75 @@ async function main(): Promise<void> {
     fullName: 'Demo Student',
     role: 'STUDENT',
     password: 'Student@123',
-    balance: '1000',
+    balance: '1000000',
+  });
+
+  const nestBasic = await prisma.course.upsert({
+    where: { id: 'seed-course-nest-basic' },
+    update: {
+      title: 'NestJS Basic',
+      description: 'Khóa học nền tảng NestJS',
+      price: '199000',
+      published: true,
+    },
+    create: {
+      id: 'seed-course-nest-basic',
+      title: 'NestJS Basic',
+      description: 'Khóa học nền tảng NestJS',
+      price: '199000',
+      published: true,
+    },
+  });
+
+  const nestAdvanced = await prisma.course.upsert({
+    where: { id: 'seed-course-nest-advanced' },
+    update: {
+      title: 'NestJS Advanced',
+      description: 'Module hóa, CQRS và background jobs',
+      price: '299000',
+      published: true,
+    },
+    create: {
+      id: 'seed-course-nest-advanced',
+      title: 'NestJS Advanced',
+      description: 'Module hóa, CQRS và background jobs',
+      price: '299000',
+      published: true,
+    },
+  });
+
+  await prisma.lesson.upsert({
+    where: { id: 'seed-lesson-1' },
+    update: {
+      courseId: nestBasic.id,
+      title: 'Giới thiệu NestJS',
+      videoUrl: 'https://example.com/video/nest-basic-1.mp4',
+      order: 1,
+    },
+    create: {
+      id: 'seed-lesson-1',
+      courseId: nestBasic.id,
+      title: 'Giới thiệu NestJS',
+      videoUrl: 'https://example.com/video/nest-basic-1.mp4',
+      order: 1,
+    },
+  });
+
+  await prisma.lesson.upsert({
+    where: { id: 'seed-lesson-2' },
+    update: {
+      courseId: nestAdvanced.id,
+      title: 'Event-driven với BullMQ',
+      videoUrl: 'https://example.com/video/nest-advanced-1.mp4',
+      order: 1,
+    },
+    create: {
+      id: 'seed-lesson-2',
+      courseId: nestAdvanced.id,
+      title: 'Event-driven với BullMQ',
+      videoUrl: 'https://example.com/video/nest-advanced-1.mp4',
+      order: 1,
+    },
   });
 }
 

@@ -78,13 +78,20 @@ npm run dev:frontend
 
 ### Bước 5: Mở Swagger
 
-- URL: `http://localhost:3000/swagger`
+- URL: `http://localhost:8000/swagger`
+
+### Bước 6: Kiểm tra nhanh các màn hình chính
+
+- Student courses: `http://localhost:3000/student/courses`
+- Student purchased courses: `http://localhost:3000/student/my-courses`
+- Instructor courses: `http://localhost:3000/instructor/courses`
+- Admin revenue: `http://localhost:3000/admin/revenue`
 
 ## 4) Tài khoản seed mặc định
 
 - Admin: `admin@nestlearn.local` / `Admin@123`
 - Instructor: `instructor@nestlearn.local` / `Instructor@123`
-- Student: `student@nestlearn.local` / `Student@123`
+- Student: `student@nestlearn.local` / `Student@123` (seed ví mặc định: `1000000`)
 
 ## 5) Scripts thường dùng
 
@@ -104,3 +111,5 @@ npm run dev:frontend
 
 - Frontend **không** truy cập trực tiếp database, chỉ gọi REST API backend qua biến môi trường `.env`.
 - `docker-compose.yml` đặt ở root để quản lý chung Postgres và Redis.
+- Mặc định local: Frontend chạy cổng `3000`, Backend chạy cổng `8000`.
+- Checklist handoff release-ready: [docs/release-ready-handoff.md](docs/release-ready-handoff.md)

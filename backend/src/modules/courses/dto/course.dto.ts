@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, Min, MinLength } from 'class-validator';
 import { CursorPaginationDto } from '../../../common/pagination/cursor-pagination.dto';
 
 export class CreateCourseDto {
@@ -12,6 +12,16 @@ export class CreateCourseDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiProperty({ example: 199000 })
+  @IsNumber()
+  @Min(0)
+  price!: number;
+
+  @ApiPropertyOptional({ example: false })
+  @IsOptional()
+  @IsBoolean()
+  published?: boolean;
 }
 
 export class UpdateCourseDto {
@@ -29,6 +39,12 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsBoolean()
   published?: boolean;
+
+  @ApiPropertyOptional({ example: 199000 })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price?: number;
 }
 
 export class CourseCursorQueryDto extends CursorPaginationDto {}

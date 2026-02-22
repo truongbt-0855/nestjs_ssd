@@ -29,4 +29,11 @@ npm run dev:frontend
 
 ## 5) Truy cập Swagger
 
-- URL: `http://localhost:3000/swagger`
+- URL: `http://localhost:8000/swagger`
+
+## 6) Kiểm tra các route frontend
+
+- Student courses: `http://localhost:3000/student/courses`
+- Student purchased courses: `http://localhost:3000/student/my-courses`
+- Instructor courses: `http://localhost:3000/instructor/courses`
+- Admin revenue: `http://localhost:3000/admin/revenue`

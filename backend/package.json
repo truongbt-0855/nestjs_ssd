@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start:dev": "nest start --watch",
-    "start": "nest start",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
+    "start:dev": "set PORT=8000&& nest start --watch",
+    "start": "set PORT=8000&& nest start",
+    "db:generate": "node scripts/prisma-safe-runner.cjs generate",
+    "db:migrate": "node scripts/prisma-safe-runner.cjs migrate dev && node scripts/prisma-safe-runner.cjs generate",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset --force"
+    "db:reset": "node scripts/prisma-safe-runner.cjs migrate reset --force"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
